@@ -1,0 +1,4 @@
+root ::= Classification
+Classification ::=  prediction
+prediction ::= "prediction" | "correction" | "confirmation"
+

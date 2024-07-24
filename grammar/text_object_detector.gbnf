@@ -1,0 +1,9 @@
+root ::= Prompt
+Prompt ::= "{"   ws   "\"chain_of_thought\":"   ws   string   ","   ws   "\"objects\":"   ws   stringlist   "}"
+Promptlist ::= "[]" | "["   ws   Prompt   (","   ws   Prompt)*   "]"
+string ::= "\""   ([^"]*)   "\""
+boolean ::= "true" | "false"
+ws ::= [ \t\n]*
+number ::= [0-9]+   "."?   [0-9]*
+stringlist ::= "["   ws   "]" | "["   ws   string   (","   ws   string)*   ws   "]"
+numberlist ::= "["   ws   "]" | "["   ws   string   (","   ws   number)*   ws   "]"

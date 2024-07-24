@@ -1,0 +1,154 @@
+{
+    "prompts": {
+        "classifier": {
+            "system_prompt": "You are a classification model. For a given a prompt, you must classify it into one of three categories: correction, prediction, or confirmation. Prediction will be about puting, placing, and reaching for objects with the hand. Correction will be about adjusting the position of objects. Confirmation will be about confirming the position of objects. Respond only using one word, from the categories prediction, correction, confirmation",
+            "examples": [
+                {
+                    "user": "Move 10 centimeters up and 7 centimeters to the left.",
+                    "assistant": "correction"
+                },
+                {
+                    "user": "Move a bit to the right.",
+                    "assistant": "correction"
+                },
+                {
+                    "user": "Place your left hand at the middle left of the cup, and  then reach for the keyboard.",
+                    "assistant": "prediction"
+                },
+                {
+                    "user": "Proceed.",
+                    "assistant": "confirmation"
+                },
+                {
+                    "user": "Move a bit more away from the headphones.",
+                    "assistant": "correction"
+                },
+                {
+                    "user": "Move 10 units up.",
+                    "assistant": "correction"
+                },
+                {
+                    "user": "ok",
+                    "assistant": "confirmation"
+                },
+                {
+                    "user": "ok",
+                    "assistant": "That's perfect"
+                },
+                {
+                    "user": "Place your right hand between the plate and the cup and then push the red button",
+                    "assistant": "prediction"
+                },
+                {
+                    "user": "Place your right hand on top of the red book",
+                    "assistant": "prediction"
+                }
+            ]
+        },
+        "object_detection": {
+            "system_prompt": "You are a JSON generator. The user will give you an instruction that may possibly be related to some objects. Your goal is to detect these objects in the prompt (even if they are indirectly implied) and then return a JSON object where you explain your thought process and provide a list of the objects in the prompt. Ensure that objects are accurately described and contextualized, including relevant textures and colors. Do not include terms referring to placement, such as body parts or general locations, in the list of objects. If there are no objects in the sentence, the objects field should be empty.. Stricly follow the following template:\n{\n  \"thought_process\": \"\",\n  \"objects\": []\n}",
+            "examples": [
+                {
+                    "user": "Place your foot next to the drain cover.",
+                    "assistant": "{\"thought_process\": \"The instruction implies the presence of a drain cover, as it mentions placing the foot next to it. Since the prompt instructs not to include body parts and/or targets in the list of objects, the detected object is only 'drain cover'.\", \"objects\": [\"drain cover\"]}"
+                },
+                {
+                    "user": "Place your right hand between the door handle and the keyboard that is blue.",
+                    "assistant": "{\"thought_process\": \"The instruction implies the presence of a door handle and a keyboard that is blue, as it mentions placing something between them. Since the prompt instructs not to include hands in the list of objects, the detected objects are 'door handle' and 'blue keyboard'.\", \"objects\": [\"door handle\", \"blue keyboard\"]}"
+                },
+                {
+                    "user": "Can you please reach for the bottle of watter that is next to the computer?",
+                    "assistant": "{\"thought_process\": \"The instruction implies the presence of a bottle of water and a computer, as it mentions reaching for something next to the computer. Therefore, the detected objects are 'bottle of water' and 'computer'.\", \"objects\": [\"bottle of water\", \"computer\"]}"
+                },
+                {
+                    "user": "Place your right hand on the chair seat.",
+                    "assistant": "{\"thought_process\": \"The instruction implies the presence of a chair seat, as it mentions reaching for placing my hand on it.\", \"objects\": [chair seat]}"
+                }
+            ]
+        },
+        "prediction": {
+            "system_prompt": "Generate detailed JSON responses to accurately position targets within a scene relative to user-provided object positions, dimensions, and relative position instructions. Define precise mathematical equations for calculating boundaries based on the specified center (x, y) and dimensions (width x height) of referenced objects. For the X-axis, determine the right boundary of the object by adding half of its width to its x-coordinate and apply a safety margin to ensure the target is not in direct contact. Adjust the margin based on the relative position instruction (e.g., \"right from the cup\"). For the Y-axis, calculate the upper boundary by subtracting half of the object's height from its y-coordinate and adjust the margin accordingly for vertical positioning instructions. Consider offsets with the same sign as per the user's specifications for accurate positioning. Provide comprehensive explanations in each JSON output to clarify how the chosen equations accurately determine the target's boundaries relative to user-defined object positions and instructions in the scene. Response Format: The system must always reply using the specific JSON template: {\"chain_of_thought\": \"\", \"math_expression_x\": \"\", \"math_expression_y\": \"\"}",
+            "examples": [
+                {
+                    "user": "A chair is located at (200, 300) and has dimensions 50x50. Place your hand a bit to the right from the chair.",
+                    "assistant": "{\"assistant\": {\"chain_of_thought\": \"To position the hand to the right of the chair located at (200, 300) with dimensions 50x50, calculate the target position relative to the chair's center. Moving right on the x-axis is positive, so add(+) half of the chair's width and a then a discplacment to determine the target's x-coordinate, since we want to be a bit to the right, we will add(+) a marginal value. The y-coordinate remains aligned with the chair's center for vertical consistency.\", \"math_expression_x\": \"200 + 50 / 2 + 20\", \"math_expression_y\": \"300\"}}"
+                },
+                {
+                    "user": "A chair is located at (200, 300) and has dimensions 50x50. Place a contact left from the chair.",
+                    "assistant": "{\"chain_of_thought\": \"To position the contact to the left of the chair located at (200, 300) with dimensions 50x50, calculate the target position relative to the chair's center. Moving left on the x-axis is negative, so subtract(-) half of the chair's width and then subtract a value(-) that makes sense based on the width of the chair. The y-coordinate remains aligned with the chair's center for vertical consistency.\", \"math_expression_x\": \"200 - 50 / 2 - 50 /2\", \"math_expression_y\": \"300\"}"
+                },
+                {
+                    "user": "A sofa is located at (100, 150) and has dimensions 100x50. The target is located a lot below the sofa.",
+                    "assistant": "{\"chain_of_thought\": \"To position the target significantly below the sofa located at (100, 150) with dimensions 100x50, calculate the target position relative to the sofa's center. Moving below on the y-axis is negative, so subtract(-) more than half of the sofa's height to position the target a notable distance below. The x-coordinate remains aligned with the sofa's center for horizontal consistency.\", \"math_expression_x\": \"100\", \"math_expression_y\": \"150 - 50 / 2 - 30\"}"
+                },
+                {
+                    "user": "A desk is located at (500, 400) and has dimensions 80x80. A monitor is located at (600, 450) and has dimensions 50x50. Place a target between the desk and the monitor.",
+                    "assistant": "{\"chain_of_thought\": \"To place the target between the desk located at (500, 400) with dimensions 80x80 and the monitor located at (600, 450) with dimensions 50x50, calculate the target position relative to the centers of both objects. Moving between the objects horizontally on the x-axis involves finding the midpoint between their centers. Vertically, ensure the target is centered between their heights.\", \"math_expression_x\": \"(500 + (80 / 2) + 600 - (50 / 2)) / 2\", \"math_expression_y\": \"(400 + (80 / 2) + 450 - (50 / 2)) / 2\"}"
+                }
+            ]
+        },
+        "correction": {
+            "system_prompt": "Generate detailed JSON responses to accurately correct target placement within a 1280x720 scene based on initial target position, relevant object information (if provided), and user instructions for movement relative to these objects. Define precise mathematical equations for adjusting the target's position, considering boundaries and safety margins. Ensure corrections are within scene boundaries and provide comprehensive explanations in each JSON output to clarify how the chosen equations accurately adjust the target's position relative to the provided instructions. Don't forget up means positive translation on the y axis (+), down negative translation on the y axis (-), right positive translation on the x axis (+), and left negative translation on the x axis(-). Response Format: The system must always reply using the specific JSON template: {\"chain_of_thought\": \"\", \"math_expression_x\": \"\", \"math_expression_y\": \"\"}",
+            "examples": [
+                {
+                    "user": "Target is at (400, 300). A chair is located at (600, 300) with dimensions 100x50. Move the target closer to the object.",
+                    "assistant": "{\"chain_of_thought\": \"The initial target position is (400, 300) and the chair is positioned at (600, 300) with dimensions 100x50. The chair's x-boundaries are from 550 to 650 and y-boundaries are from 275 to 325, considering its center and dimensions. To move the target closer, calculate the x-distance to the closest edge of the chair: 550 - 400 = 150. Since the y-coordinates are aligned and within boundaries, no y-movement is needed. Assuming a small margin for 'a bit' closer, move x by a small positive distance (e.g., 10 units assumed).\", \"math_expression_x\": \"400 + 10\", \"math_expression_y\": \"300\"}"
+                },
+                {
+                    "user": "Target is at (500, 500). A bottle is located at (500, 600) with dimensions 100x50. Move the target away from the bottle. ",
+                    "assistant": "{\"chain_of_thought\": \"The initial target position is (500, 500) and the bottle is positioned at (500, 600) with dimensions 100x50. The bottle's y-boundaries are from 575 to 625, and x-boundaries are from 450 to 550. To move the target away, calculate the y-distance to the closest edge of the bottle: 575 - 500 = 75. Assuming a small margin for 'a bit' away, move y by a small negative distance (e.g., 10 units assumed).\", \"math_expression_x\": \"500\", \"math_expression_y\": \"500 - 10\"}"
+                },
+                {
+                    "user": "Target is at (300, 300). Move a bit to the right. ",
+                    "assistant": "{\"chain_of_thought\": \"The initial target position is (300, 300). To move the target to the right, translate the x-coordinate positively. Assuming a small translation of 30 units.\", \"math_expression_x\": \"300 + 30\", \"math_expression_y\": \"300\"}"
+                },
+                {
+                    "user": "Target is at (400, 400). Move the target up. ",
+                    "assistant": "{\"chain_of_thought\": \"The initial target position is (400, 400). To move the target up, translate the y-coordinate positively. Assuming a small translation of 30 units.\", \"math_expression_x\": \"400\", \"math_expression_y\": \"400 + 30\"}"
+                },
+                {
+                    "user": "Target is at (400, 400). Move the target down. ",
+                    "assistant": "{\"chain_of_thought\": \"The initial target position is (400, 400). To move the target down, translate the y-coordinate negatively. Assuming a small translation of 30 units.\", \"math_expression_x\": \"400\", \"math_expression_y\": \"400 - 30\"}"
+                }
+            ]
+        },
+        "rel_or_abs": {
+            "system_prompt": "Please generate JSON output that identifies whether an instruction pertains to a specific placement on an object or a position relative to an object. Include a \"chain_of_thought\" field explaining the reasoning process, a \"position\" field indicating \"absolute\" or \"relative\", and an \"objects\" field listing any objects mentioned in the instruction.",
+            "examples": [
+                {
+                    "user": "Put your hand left from the aluminum tube.",
+                    "assistant": "{\"chain_of_thought\": \"The instruction 'Put your hand left from the aluminum tube' specifies an action relative to the position of an object, the aluminum tube. The position is determined based on the spatial relationship to the tube, not a specific location on the tube itself.\", \"position\": \"relative\", \"objects\": [\"aluminum tube\"]}"
+                },
+                {
+                    "user": "Place your hand on top of the book.",
+                    "assistant": "{\"chain_of_thought\": \"The instruction 'Place your hand on top of the book' specifies a precise location on a specific object, the book. This action directs placing the hand directly on the book's surface, which is an absolute position.\", \"position\": \"absolute\", \"objects\": [\"book\"]}"
+                },
+                {
+                    "user": "Lean on the desk.",
+                    "assistant": "{\"chain_of_thought\": \"The instruction 'Lean on the dek' directs the action to a specific object, the dek. This implies a specific placement on the pole itself, making it an absolute position.\", \"position\": \"absolute\", \"objects\": [\"dek\"]}"
+                },
+                {
+                    "user": "Reach for the door handle.",
+                    "assistant": "{\"chain_of_thought\": \"The instruction 'Reach for the door handle' directs the action towards a specific object, the door handle. This implies moving towards and attempting to touch the handle, making it an absolute position.\", \"position\": \"absolute\", \"objects\": [\"door handle\"]}"
+                },
+                {
+                    "user": "Place your hand inside the table.",
+                    "assistant": "{\"chain_of_thought\": \"The instruction 'Place your hand inside the table' specifies a precise location within a specific object, the table. This action directs placing the hand inside the table, which is an absolute position.\", \"position\": \"absolute\", \"objects\": [\"table\"]}"
+                },
+                {
+                    "user": "Lean on top of the desk.",
+                    "assistant": "{\"chain_of_thought\": \"The instruction 'Lean on top of the desk' specifies a precise location on a specific object, the desk. This action directs leaning on the top surface of the desk, which is an absolute position.\", \"position\": \"absolute\", \"objects\": [\"desk\"]}"
+                },
+                {
+                    "user": "Step in the middle of the carpet.",
+                    "assistant": "{\"chain_of_thought\": \"The instruction 'Step in the middle of the carpet' directs the action to a specific location on the carpet, which is the middle. This action is defined by a specific spot on the object, making it an absolute position.\", \"position\": \"absolute\", \"objects\": [\"carpet\"]}"
+                },
+                {
+                    "user": "Place your hand on the table between the blue and the black box.",
+                    "assistant": "{\"chain_of_thought\": \"The instruction 'Place your hand on the table between the blue and the black box' specifies a location that depends on the positions of the blue and black box. Since the location is defined in relation to other objects, it is a relative position.\", \"position\": \"relative\", \"objects\": [\"table\", \"blue box\", \"black box\"]}"
+
+                }
+            ]
+        }
+    }
+}
