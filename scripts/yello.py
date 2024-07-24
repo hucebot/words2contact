@@ -19,7 +19,7 @@ matplotlib.rcParams['interactive'] == True
 warnings.filterwarnings("ignore")
 
 WEIGHTS_NAME = "groundingdino_swint_ogc.pth"
-CONFIG_PATH = "scripts/GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py"
+CONFIG_PATH = "config/GroundingDINO_SwinT_OGC.py"
 IMAGE_PATH = "dataset/images/53e2f90e25d2d125215b2c7f1612f54959ef89b779c33a40e341e72d62b45760.png"
 BOX_TRESHOLD = 0.2
 TEXT_TRESHOLD = 0.2

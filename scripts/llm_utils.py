@@ -266,7 +266,7 @@ class LPVCS:
             except:
                 return []
 
-    def predict(self, prompt: str, img: np.array, objects=None) -> Point:
+    def predict(self, prompt: str, img: np.array, objects=None):
         self.history = []
         self.log.append(prompt)
         # let's extract the objects from the prompt
