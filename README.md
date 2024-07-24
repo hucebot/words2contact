@@ -23,7 +23,7 @@ For more information, please visit the [paper website](https://hucebot.github.io
 ## Acknowledgements
 This research was supported by the CPER CyberEntreprises, the Creativ’Lab platform of Inria/LORIA, the EU Horizon project euROBIN (GA n.101070596), the France 2030 program through the PEPR O2R projects AS3 and PI3 (ANR-22-EXOD-007, ANR-22-EXOD-004)
 
-<span class="author-block">
+<div>
               <img src="https://hucebot.github.io/flow_multisupport_website/resources/logos/logo_inria.png" width="15%" style="margin:1%">
               <img src="https://hucebot.github.io/flow_multisupport_website/resources/logos/logo_cnrs.png" width="5%" style="margin:1%">
               <img src="https://hucebot.github.io/flow_multisupport_website/resources/logos/logo_ul.png" width="15%" style="margin:1%">
@@ -31,4 +31,4 @@ This research was supported by the CPER CyberEntreprises, the Creativ’Lab plat
               <img src="https://hucebot.github.io/flow_multisupport_website/resources/logos/logo_eurobin.png" width="15%" style="margin:1%">
               <img src="https://hucebot.github.io/flow_multisupport_website/resources/logos/logo_eu.png" width="15%" style="margin:1%">
               <img src="https://hucebot.github.io/flow_multisupport_website/resources/logos/logo_pepr.png" width="10%" style="margin:1%">
-</span>
+<div>
