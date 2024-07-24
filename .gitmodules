@@ -1,0 +1,3 @@
+[submodule "scripts/CLIP_Surgery"]
+	path = scripts/CLIP_Surgery
+	url = git@github.com:xmed-lab/CLIP_Surgery.git
