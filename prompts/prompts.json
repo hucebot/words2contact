@@ -8,10 +8,6 @@
                     "assistant": "correction"
                 },
                 {
-                    "user": "Move a bit to the right.",
-                    "assistant": "correction"
-                },
-                {
                     "user": "Place your left hand at the middle left of the cup, and  then reach for the keyboard.",
                     "assistant": "prediction"
                 },
@@ -28,19 +24,7 @@
                     "assistant": "correction"
                 },
                 {
-                    "user": "ok",
-                    "assistant": "confirmation"
-                },
-                {
-                    "user": "ok",
-                    "assistant": "That's perfect"
-                },
-                {
                     "user": "Place your right hand between the plate and the cup and then push the red button",
-                    "assistant": "prediction"
-                },
-                {
-                    "user": "Place your right hand on top of the red book",
                     "assistant": "prediction"
                 }
             ]
@@ -57,12 +41,16 @@
                     "assistant": "{\"thought_process\": \"The instruction implies the presence of a door handle and a keyboard that is blue, as it mentions placing something between them. Since the prompt instructs not to include hands in the list of objects, the detected objects are 'door handle' and 'blue keyboard'.\", \"objects\": [\"door handle\", \"blue keyboard\"]}"
                 },
                 {
-                    "user": "Can you please reach for the bottle of watter that is next to the computer?",
+                    "user": "Can you please reach for the bottle of water that is next to the computer?",
                     "assistant": "{\"thought_process\": \"The instruction implies the presence of a bottle of water and a computer, as it mentions reaching for something next to the computer. Therefore, the detected objects are 'bottle of water' and 'computer'.\", \"objects\": [\"bottle of water\", \"computer\"]}"
                 },
                 {
                     "user": "Place your right hand on the chair seat.",
                     "assistant": "{\"thought_process\": \"The instruction implies the presence of a chair seat, as it mentions reaching for placing my hand on it.\", \"objects\": [chair seat]}"
+                },
+                {
+                    "user": "Place your left hand on the dark gray box.",
+                    "assistant": "{\"thought_process\": \"The instruction implies the presence of a dark gray box, as it mentions reaching for placing my hand on it.\", \"objects\": [dark gray box]}"
                 }
             ]
         },
@@ -84,6 +72,10 @@
                 {
                     "user": "A desk is located at (500, 400) and has dimensions 80x80. A monitor is located at (600, 450) and has dimensions 50x50. Place a target between the desk and the monitor.",
                     "assistant": "{\"chain_of_thought\": \"To place the target between the desk located at (500, 400) with dimensions 80x80 and the monitor located at (600, 450) with dimensions 50x50, calculate the target position relative to the centers of both objects. Moving between the objects horizontally on the x-axis involves finding the midpoint between their centers. Vertically, ensure the target is centered between their heights.\", \"math_expression_x\": \"(500 + (80 / 2) + 600 - (50 / 2)) / 2\", \"math_expression_y\": \"(400 + (80 / 2) + 450 - (50 / 2)) / 2\"}"
+                },
+                {
+                    "user": "Plastic bag located at [937, 480] with dimensions 318x191. The target is below the middle of the plastic bag.",
+                    "assistant": "{\"chain_of_thought\": \"To position the target below the plastic bag located at [937, 480] with dimensions 318x191 in the middle, calculate the target position relative to the plastic bag's center. Moving below on the y-axis is negative, so subtract(-) half of the plastic bag's height to position the target centrally below. The x-coordinate remains aligned with the plastic bag's center for horizontal consistency.\", \"math_expression_x\": \"937\", \"math_expression_y\": \"480 - 191 / 2\"}"
                 }
             ]
         },
@@ -124,14 +116,6 @@
                     "assistant": "{\"chain_of_thought\": \"The instruction 'Place your hand on top of the book' specifies a precise location on a specific object, the book. This action directs placing the hand directly on the book's surface, which is an absolute position.\", \"position\": \"absolute\", \"objects\": [\"book\"]}"
                 },
                 {
-                    "user": "Lean on the desk.",
-                    "assistant": "{\"chain_of_thought\": \"The instruction 'Lean on the dek' directs the action to a specific object, the dek. This implies a specific placement on the pole itself, making it an absolute position.\", \"position\": \"absolute\", \"objects\": [\"dek\"]}"
-                },
-                {
-                    "user": "Reach for the door handle.",
-                    "assistant": "{\"chain_of_thought\": \"The instruction 'Reach for the door handle' directs the action towards a specific object, the door handle. This implies moving towards and attempting to touch the handle, making it an absolute position.\", \"position\": \"absolute\", \"objects\": [\"door handle\"]}"
-                },
-                {
                     "user": "Place your hand inside the table.",
                     "assistant": "{\"chain_of_thought\": \"The instruction 'Place your hand inside the table' specifies a precise location within a specific object, the table. This action directs placing the hand inside the table, which is an absolute position.\", \"position\": \"absolute\", \"objects\": [\"table\"]}"
                 },
@@ -140,13 +124,8 @@
                     "assistant": "{\"chain_of_thought\": \"The instruction 'Lean on top of the desk' specifies a precise location on a specific object, the desk. This action directs leaning on the top surface of the desk, which is an absolute position.\", \"position\": \"absolute\", \"objects\": [\"desk\"]}"
                 },
                 {
-                    "user": "Step in the middle of the carpet.",
-                    "assistant": "{\"chain_of_thought\": \"The instruction 'Step in the middle of the carpet' directs the action to a specific location on the carpet, which is the middle. This action is defined by a specific spot on the object, making it an absolute position.\", \"position\": \"absolute\", \"objects\": [\"carpet\"]}"
-                },
-                {
                     "user": "Place your hand on the table between the blue and the black box.",
                     "assistant": "{\"chain_of_thought\": \"The instruction 'Place your hand on the table between the blue and the black box' specifies a location that depends on the positions of the blue and black box. Since the location is defined in relation to other objects, it is a relative position.\", \"position\": \"relative\", \"objects\": [\"table\", \"blue box\", \"black box\"]}"
-
                 }
             ]
         }
