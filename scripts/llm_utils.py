@@ -126,7 +126,7 @@ def covert_to_template_with_examples(user_prompt: str, system_prompt: str, examp
         return prompt
 
 
-class LPVCS:
+class Words2Contact:
     def __init__(self, use_gpt=False, use_phi=False, llm_path='models/LLMs/Tess/tess-10.7b-v1.5b.Q6_K.gguf', yello_vlm="GroundingDINO", saygment_vlm="CLIP_Surgery", chat_template="Orca-Vicuna"):
         self.use_gpt = use_gpt
         if self.use_gpt:

@@ -1,4 +1,4 @@
-from llm_utils import LPVCS
+from llm_utils import Words2Contact
 import cv2
 import matplotlib.pyplot as plt
 
@@ -7,11 +7,11 @@ if __name__ == "__main__":
     IMAGE_PATH = "data/test.png"
     img = cv2.flip(cv2.imread(IMAGE_PATH), 0)
 
-    LPVCS = LPVCS(use_gpt=True, yello_vlm="GroundingDINO")
+    words2contact = Words2Contact(use_gpt=True, yello_vlm="GroundingDINO")
 
     prompt = "Place your hand above the red bowl, left from the banana."
 
-    point, _, bbs, _, response= LPVCS.predict(prompt, img)
+    point, _, bbs, _, response= words2contact.predict(prompt, img)
 
     print("User: ", prompt)
     print("Response: ", response)
