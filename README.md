@@ -4,7 +4,7 @@ Official implementation of the paper "Words2Contact: Identifying Support Contact
 
 For more information, please visit the [paper website](https://hucebot.github.io/words2contact_website/).
 ---
-⚠️Under Constructions⚠️
+⚠️Under Construction⚠️
 ---
 ## Citing Words2Contact (preprint)
 ```bibtex
