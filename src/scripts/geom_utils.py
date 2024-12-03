@@ -32,7 +32,7 @@ class Point:
 
 
 class BoundingBox:
-    def __init__(self, x: float, y: float, w: float, h: float, class_name: str = None):
+    def __init__(self, x: float, y: float, width: float, height: float, class_name: str = None):
         """
         Initialize a bounding box.
 
@@ -46,8 +46,8 @@ class BoundingBox:
         self.anchor = Point(x, y)
         self.x = x  # Bottom-left corner X
         self.y = y  # Bottom-left corner Y
-        self.w = w  # Width
-        self.h = h  # Height
+        self.w = width  # Width
+        self.h = height  # Height
         self.class_name = class_name
 
     def scale(self, scale_factor_x: float, scale_factor_y: float):

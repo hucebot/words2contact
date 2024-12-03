@@ -5,8 +5,9 @@ from llama_cpp import Llama
 from llama_cpp import LlamaGrammar
 from typing import List
 from math_pars import get_result
-from yello import Yello, Point
+from yello import Yello
 from saygment import Saygment
+from geom_utils import Point
 
 
 def convert_to_template(user_prompt: str, system_prompt: str, template: str) -> str:
@@ -320,7 +321,7 @@ class Words2Contact:
                 user_prompt, system_prompt, prompts_json["prediction"]["examples"], self.template)
 
             # use llama cpp
-            grammar = LlamaGrammar.from_file("grammar/new_grammar.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file("grammar/rel_pos_grammar.gbnf", verbose=False)
             response = self.model(final_prompt, max_tokens=1024*4, temperature=0.6,
                                   grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
         try:
@@ -410,7 +411,7 @@ class Words2Contact:
             return Point(x, y), bbs, cot, response
         else:
             # use llama cpp
-            grammar = LlamaGrammar.from_file("grammar/grammar.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file("grammar/eef_grammar.gbnf", verbose=False)
             output = self.model(convert_to_template(user_prompt, system_prompt, self.template),
                                 max_tokens=1024*3, temperature=0.2, grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
 

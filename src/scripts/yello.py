@@ -23,7 +23,7 @@ warnings.filterwarnings("ignore")
 # Constants
 WEIGHTS_NAME = "groundingdino_swint_ogc.pth"
 CONFIG_PATH = "config/GroundingDINO_SwinT_OGC.py"
-WEIGHTS_PATH = os.path.join("models/VLMs/GroundingDINO", WEIGHTS_NAME)
+WEIGHTS_PATH = os.path.join("/deps/weights", WEIGHTS_NAME)
 BOX_THRESHOLD = 0.2
 TEXT_THRESHOLD = 0.2
 TEXT_PROMPT = ["windex"]
@@ -73,6 +73,7 @@ class Yello:
         """Load the GroundingDINO model."""
         if self.debug:
             print("Loading GroundingDINO Model...")
+        print(f"Loading model from: {WEIGHTS_PATH}")
         self.model = Model(CONFIG_PATH, WEIGHTS_PATH, device=self.device)
         if self.debug:
             print("GroundingDINO Model loaded successfully.")
