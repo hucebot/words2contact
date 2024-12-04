@@ -63,7 +63,6 @@ def convert_to_template(user_prompt: str, system_prompt: str, template: str) -> 
     else:
         return f'{system_prompt}\nUser:\n{user_prompt}'
 
-
 def covert_to_template_with_examples(user_prompt: str, system_prompt: str, examples: dict, template: str) -> str:
     if template == "ChatML":
         # <|im_start|>system
@@ -128,7 +127,7 @@ def covert_to_template_with_examples(user_prompt: str, system_prompt: str, examp
 
 
 class Words2Contact:
-    def __init__(self, use_gpt=False, use_phi=False, llm_path='models/LLMs/Tess/tess-10.7b-v1.5b.Q6_K.gguf', yello_vlm="GroundingDINO", saygment_vlm="CLIP_Surgery", chat_template="Orca-Vicuna"):
+    def __init__(self, use_gpt=False, llm_path='models/tess-10.7b-v1.5b.Q6_K.gguf', yello_vlm="GroundingDINO", saygment_vlm="CLIP_Surgery", chat_template="Orca-Vicuna"):
         self.use_gpt = use_gpt
         if self.use_gpt:
             from openai_key import openai_key
@@ -159,7 +158,7 @@ class Words2Contact:
         """
         return Llama(llm_path, n_gpu_layers=-1, verbose=False, n_ctx=1024*4)
 
-    def classify(self, prompt: str) -> str:
+    def module_selector(self, prompt: str) -> str:
         """
             Classifies the prompt into one of the following categories:
             - prediction
@@ -215,7 +214,7 @@ class Words2Contact:
 
             return category
 
-    def get_objects_in_prompt(self, prompt: str) -> List[str]:
+    def object_in_prompt_detector(self, prompt: str) -> List[str]:
         """
             Gets the objects in the prompt
 
@@ -272,7 +271,7 @@ class Words2Contact:
         self.log.append(prompt)
         # let's extract the objects from the prompt
         if objects is None:
-            objects = self.get_objects_in_prompt(prompt)
+            objects = self.object_in_prompt_detector(prompt)
 
         # get the bounding boxes
         if len(objects) == 0:
@@ -348,7 +347,7 @@ class Words2Contact:
     def correct(self, prompt: str, target: np.array, img: np.array) -> Point:
         self.log.append(prompt)
 
-        objects = self.get_objects_in_prompt(prompt)
+        objects = self.object_in_prompt_detector(prompt)
         bbs = []
         if len(objects) > 0:
             bbs = self.yello.predict(img, objects)
@@ -421,7 +420,7 @@ class Words2Contact:
             cot = response["chain_of_thought"]
             return Point(x, y), bbs, cot, response
 
-    def rel_or_abs(self, prompt, img):
+    def prompt_analyzer(self, prompt, img):
 
         prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["rel_or_abs"]["system_prompt"]
