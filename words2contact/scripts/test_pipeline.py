@@ -1,4 +1,4 @@
-from llm_utils import Words2Contact
+from words2contact.scripts.words2contacts import Words2Contact
 import cv2
 import matplotlib.pyplot as plt
 
