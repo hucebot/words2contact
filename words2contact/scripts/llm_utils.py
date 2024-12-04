@@ -63,6 +63,7 @@ def convert_to_template(user_prompt: str, system_prompt: str, template: str) -> 
     else:
         return f'{system_prompt}\nUser:\n{user_prompt}'
 
+
 def covert_to_template_with_examples(user_prompt: str, system_prompt: str, examples: dict, template: str) -> str:
     if template == "ChatML":
         # <|im_start|>system
@@ -184,7 +185,8 @@ class Words2Contact:
 
             for example in prompts_json["classifier"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
 
             messages.append({"role": "user", "content": prompt})
 
@@ -204,7 +206,8 @@ class Words2Contact:
 
         else:
             # first we nee the classification grammar
-            grammar = LlamaGrammar.from_file("grammar/classifier.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "grammar/classifier.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["prediction"]["examples"], self.template)
@@ -233,7 +236,8 @@ class Words2Contact:
             messages.append({"role": "system", "content": system_prompt})
             for example in prompts_json["object_detection"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
             messages.append({"role": "user", "content": prompt})
 
             completion = self.client.chat.completions.create(
@@ -252,7 +256,8 @@ class Words2Contact:
                 return []
 
         else:
-            grammar = LlamaGrammar.from_file("grammar/text_object_detector.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "grammar/text_object_detector.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["object_detection"]["examples"], self.template)
@@ -300,7 +305,8 @@ class Words2Contact:
 
             for example in prompts_json["prediction"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
 
             # now we add the user prompt
             messages.append({"role": "user", "content": user_prompt})
@@ -320,13 +326,13 @@ class Words2Contact:
                 user_prompt, system_prompt, prompts_json["prediction"]["examples"], self.template)
 
             # use llama cpp
-            grammar = LlamaGrammar.from_file("grammar/rel_pos_grammar.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "grammar/rel_pos_grammar.gbnf", verbose=False)
             response = self.model(final_prompt, max_tokens=1024*4, temperature=0.6,
                                   grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
         try:
             response = json.loads(response)
 
-            print("="*10)
             math_x = response["math_expression_x"]
             math_y = response["math_expression_y"]
             x = int(get_result(math_x))
@@ -372,11 +378,10 @@ class Words2Contact:
             messages.append({"role": "system", "content": system_prompt})
             for example in prompts_json["correction"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
 
             messages.append({"role": "user", "content": user_prompt})
-
-            print(messages)
 
             completion = self.client.chat.completions.create(
                 model="gpt-3.5-turbo",
@@ -389,7 +394,6 @@ class Words2Contact:
             response = completion.choices[0].message.content
             response = json.loads(response)
             self.history.append([user_prompt, response])
-            print(response)
             try:
                 math_x = response["math_expression_x"]
                 math_y = response["math_expression_y"]
@@ -404,13 +408,13 @@ class Words2Contact:
             except:
                 x = target[1]
                 y = target[0]
-            print(x, y)
             cot = response["chain_of_thought"]
 
             return Point(x, y), bbs, cot, response
         else:
             # use llama cpp
-            grammar = LlamaGrammar.from_file("grammar/eef_grammar.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "grammar/eef_grammar.gbnf", verbose=False)
             output = self.model(convert_to_template(user_prompt, system_prompt, self.template),
                                 max_tokens=1024*3, temperature=0.2, grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
 
@@ -430,7 +434,8 @@ class Words2Contact:
             messages.append({"role": "system", "content": system_prompt})
             for example in prompts_json["rel_or_abs"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
             messages.append({"role": "user", "content": prompt})
 
             completion = self.client.chat.completions.create(
@@ -444,12 +449,14 @@ class Words2Contact:
             response = json.loads(response)
 
         else:
-            grammar = LlamaGrammar.from_file("grammar/rel_or_abs.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "grammar/rel_or_abs.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["rel_or_abs"]["examples"], self.template)
 
-            output = self.model(final_prompt, max_tokens=1024*3, temperature=0.7, grammar=grammar)['choices'][0]['text']
+            output = self.model(final_prompt, max_tokens=1024*3,
+                                temperature=0.7, grammar=grammar)['choices'][0]['text']
 
             response = json.loads(output)
 
