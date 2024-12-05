@@ -59,6 +59,7 @@ class Saygment:
             "Florence-2": self._load_florence2,
         }
         loaders[self.vlm]()
+        self.model.to(self.device)
 
     def _load_clipseg(self):
         if self.debug:
@@ -90,7 +91,7 @@ class Saygment:
         self.model = GroupViTModel.from_pretrained("nvidia/groupvit-gcc-yfcc", cache_dir=self.cache_dir)
         self.processor = AutoProcessor.from_pretrained(
             "nvidia/groupvit-gcc-yfcc", cache_dir=self.cache_dir
-        ).to(self.device)
+        )
         if self.debug:
             print("GroupViT model loaded successfully.")
 
@@ -192,7 +193,7 @@ class Saygment:
             generated_text = self.processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
             parsed_answer = self.processor.post_process_generation(
                 generated_text, task=task_prompt, image_size=img_pil.size
-            )
+            )['<REFERRING_EXPRESSION_SEGMENTATION>']
 
         black = Image.new("RGB", img_pil.size, (0, 0, 0))
         mask = ImageDraw.Draw(black)
