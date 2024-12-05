@@ -60,6 +60,7 @@ RUN git clone https://github.com/IDEA-Research/GroundingDINO.git /deps/Grounding
 RUN pip uninstall -y opencv-python-headless && \
     pip install --no-cache-dir --upgrade opencv-python
 
+RUN pip install einops
 # Set working directory
 WORKDIR /home/words2contact/
 

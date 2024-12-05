@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore")
 WEIGHTS_NAME = "groundingdino_swint_ogc.pth"
 CONFIG_PATH = "words2contact/config/GroundingDINO_SwinT_OGC.py"
 WEIGHTS_PATH = os.path.join("/deps/weights", WEIGHTS_NAME)
-BOX_THRESHOLD = 0.2
+BOX_THRESHOLD = 0.4
 TEXT_THRESHOLD = 0.2
 
 
@@ -77,7 +77,8 @@ class Yello:
         """Load the Owlv2 model."""
         if self.debug:
             print("Loading Owlv2 Model...")
-        self.processor = AutoProcessor.from_pretrained("google/owlv2-base-patch16")
+        self.processor = AutoProcessor.from_pretrained(
+            "google/owlv2-base-patch16")
         self.model = Owlv2ForObjectDetection.from_pretrained(
             "google/owlv2-base-patch16", cache_dir=self.cache_dir
         ).to(self.device)
@@ -139,7 +140,8 @@ class Yello:
         bbs = []
         for i, obj in enumerate(objects):
             seg_heatmap = torch.sigmoid(predictions[i][0])
-            seg_heatmap_resized = self.resize_segmentation(seg_heatmap, img_pil.size)
+            seg_heatmap_resized = self.resize_segmentation(
+                seg_heatmap, img_pil.size)
 
             # Extract bounding boxes
             bbs.append(self.extract_bounding_box(seg_heatmap_resized, obj))
@@ -150,7 +152,8 @@ class Yello:
         """
         Predict using the GroundingDINO model.
         """
-        detections = self.model.predict_with_classes(img, objects, BOX_THRESHOLD, TEXT_THRESHOLD)
+        detections = self.model.predict_with_classes(
+            img, objects, BOX_THRESHOLD, TEXT_THRESHOLD)
 
         bbs = []
         seen_classes = set()
@@ -159,8 +162,6 @@ class Yello:
             class_id = detections.class_id[i]
             if class_id in seen_classes:
                 continue
-            seen_classes.add(class_id)
-
             try:
                 bb = BoundingBox(
                     x=detections.xyxy[i][0],
@@ -169,13 +170,13 @@ class Yello:
                     height=detections.xyxy[i][3] - detections.xyxy[i][1],
                     class_name=objects[class_id],
                 )
-            except IndexError:
+            except:
                 bb = BoundingBox(
                     x=detections.xyxy[i][0],
                     y=detections.xyxy[i][1],
                     width=detections.xyxy[i][2] - detections.xyxy[i][0],
                     height=detections.xyxy[i][3] - detections.xyxy[i][1],
-                    class_name="Unknown",
+                    class_name="",
                 )
             bbs.append(bb)
 
@@ -187,7 +188,8 @@ class Yello:
         """
         img_pil = Image.fromarray(img)
         objects_formatted = [[obj] for obj in objects]
-        inputs = self.processor(text=objects_formatted, images=img_pil, return_tensors="pt").to(self.device)
+        inputs = self.processor(
+            text=objects_formatted, images=img_pil, return_tensors="pt").to(self.device)
 
         with torch.no_grad():
             outputs = self.model(**inputs)
@@ -201,7 +203,7 @@ class Yello:
         # Extract unique detections
         bbs, seen_objects = [], {}
         for i, box in enumerate(results[0]["boxes"]):
-            label = objects[results[0]["labels"][i]][0]
+            label = objects[results[0]["labels"][i]]
             score = results[0]["scores"][i].item()
             if label in seen_objects and seen_objects[label][1] >= score:
                 continue
@@ -238,16 +240,19 @@ class Yello:
                 input_ids=inputs["input_ids"],
                 pixel_values=inputs["pixel_values"],
                 max_new_tokens=1024,
-                early_stopping=True,
+                early_stopping=False,
+                do_sample=False,
                 num_beams=3,
             )
-            generated_text = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
+            generated_text = self.processor.batch_decode(
+                generated_ids, skip_special_tokens=False)[0]
             parsed_answer = self.processor.post_process_generation(
                 generated_text,
                 task=task_prompt,
                 image_size=(img_pil.width, img_pil.height),
             )
 
+        print(parsed_answer)
         bbs = []
         parsed_answer = parsed_answer["<OPEN_VOCABULARY_DETECTION>"]
         for bbox, label in zip(parsed_answer["bboxes"], parsed_answer["bboxes_labels"]):
@@ -261,7 +266,7 @@ class Yello:
                     class_name=label
                 )
             )
-
+        print(bbs)
         return bbs
 
     def resize_segmentation(self, heatmap, original_size):
@@ -277,12 +282,14 @@ class Yello:
         """
         Extract bounding box from heatmap using contours.
         """
-        gray = (heatmap * 255).astype(np.uint8)
-        _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        gray = (heatmap[0] * 255).astype(np.uint8)
+        _, thresh = cv2.threshold(
+            gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        contours, _ = cv2.findContours(
+            thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Select largest contour as the bounding box
         largest_contour = max(contours, key=cv2.contourArea)
         x, y, w, h = cv2.boundingRect(largest_contour)
         return BoundingBox(x, y, w, h, class_name=class_name)
-
