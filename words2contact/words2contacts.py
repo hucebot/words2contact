@@ -160,7 +160,7 @@ class Words2Contact:
             Returns:
             Llama: The LLM model
         """
-        return Llama(llm_path, n_gpu_layers=-1, verbose=False, n_ctx=1024*4)
+        return Llama(llm_path, n_gpu_layers=100, verbose=True, n_ctx=1024*4)
 
     def module_selector(self, prompt: str) -> str:
         """
@@ -210,7 +210,7 @@ class Words2Contact:
         else:
             # first we nee the classification grammar
             grammar = LlamaGrammar.from_file(
-                "grammar/classifier.gbnf", verbose=False)
+                "words2contact/grammar/classifier.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["prediction"]["examples"], self.template)
@@ -260,7 +260,7 @@ class Words2Contact:
 
         else:
             grammar = LlamaGrammar.from_file(
-                "grammar/text_object_detector.gbnf", verbose=False)
+                "words2contact/grammar/text_object_detector.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["object_detection"]["examples"], self.template)
@@ -330,7 +330,7 @@ class Words2Contact:
 
             # use llama cpp
             grammar = LlamaGrammar.from_file(
-                "grammar/rel_pos_grammar.gbnf", verbose=False)
+                "words2contact/grammar/rel_pos_grammar.gbnf", verbose=False)
             response = self.model(final_prompt, max_tokens=1024*4, temperature=0.6,
                                   grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
         try:
@@ -417,7 +417,7 @@ class Words2Contact:
         else:
             # use llama cpp
             grammar = LlamaGrammar.from_file(
-                "grammar/eef_grammar.gbnf", verbose=False)
+                "words2contact/grammar/eef_grammar.gbnf", verbose=False)
             output = self.model(convert_to_template(user_prompt, system_prompt, self.template),
                                 max_tokens=1024*3, temperature=0.2, grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
 
@@ -453,7 +453,7 @@ class Words2Contact:
 
         else:
             grammar = LlamaGrammar.from_file(
-                "grammar/rel_or_abs.gbnf", verbose=False)
+                "words2contact/grammar/rel_or_abs.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["rel_or_abs"]["examples"], self.template)

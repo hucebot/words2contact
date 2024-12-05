@@ -43,8 +43,7 @@ RUN pip install --no-cache-dir \
 
 
 # Install LLAMA CPP Python with CUDA support
-RUN pip install llama-cpp-python \
-  --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu121
+RUN CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python
 
 # Download and setup weights for GroundingDINO
 RUN mkdir -p /deps/weights && \

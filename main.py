@@ -3,12 +3,12 @@ import cv2
 import matplotlib.pyplot as plt
 from words2contact import Words2Contact
 
-def main(image_path, prompt, use_gpt, yello_vlm, output_path):
+def main(image_path, prompt, use_gpt, yello_vlm, output_path, llm_path, chat_template):
     # Load and process the image
     img = cv2.flip(cv2.imread(image_path), 0)
 
     # Initialize the Words2Contact model
-    words2contact = Words2Contact(use_gpt=use_gpt, yello_vlm=yello_vlm)
+    words2contact = Words2Contact(use_gpt=use_gpt, yello_vlm=yello_vlm, llm_path=llm_path, chat_template=chat_template)
 
     # Predict based on the prompt and image
     point, _, bbs, _, response = words2contact.predict(prompt, img)
@@ -36,9 +36,11 @@ if __name__ == "__main__":
     parser.add_argument("--use_gpt", action="store_true", help="use openai api for the llm, remember to export OPEANAI_KEY")
     parser.add_argument("--yello_vlm", type=str, default="GroundingDINO", help="Model to use for YELLO VLM. Default: 'GroundingDINO'.")
     parser.add_argument("--output_path", type=str, default="data/test_output.png", help="Path to save the output image. Default: 'data/test_output.png'.")
+    parser.add_argument("--llm_path", type=str, default="models/Calme-7B-Instruct-v0.4.Q8_0.gguf", help="Path to the .gguf llm model weights")
+    parser.add_argument("--chat_template", type=str, default="ChatML", help="OpenAI key for the gpt model")
 
     # Parse arguments
     args = parser.parse_args()
 
     # Call the main function
-    main(args.image_path, args.prompt, args.use_gpt, args.yello_vlm, args.output_path)
+    main(args.image_path, args.prompt, args.use_gpt, args.yello_vlm, args.output_path, args.llm_path, args.chat_template)
