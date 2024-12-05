@@ -1,4 +1,4 @@
-from geom_utils import Point
+from .geom_utils import Point
 from transformers import (
     AutoProcessor,
     CLIPSegForImageSegmentation,
@@ -11,7 +11,7 @@ import numpy as np
 import torch
 import cv2
 from PIL import Image, ImageDraw
-import CLIP_Surgery.clip as clip_surgery
+from .CLIP_Surgery import clip as clip_surgery
 
 BICUBIC = InterpolationMode.BICUBIC
 

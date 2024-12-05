@@ -1,13 +1,14 @@
 import json
+import os
 import numpy as np
 from openai import OpenAI
 from llama_cpp import Llama
 from llama_cpp import LlamaGrammar
 from typing import List
-from math_pars import get_result
-from yello import Yello
-from saygment import Saygment
-from geom_utils import Point
+from .math_pars import get_result
+from .yello import Yello
+from .saygment import Saygment
+from .geom_utils import Point
 
 
 def convert_to_template(user_prompt: str, system_prompt: str, template: str) -> str:
@@ -131,8 +132,10 @@ class Words2Contact:
     def __init__(self, use_gpt=False, llm_path='models/tess-10.7b-v1.5b.Q6_K.gguf', yello_vlm="GroundingDINO", saygment_vlm="CLIP_Surgery", chat_template="Orca-Vicuna"):
         self.use_gpt = use_gpt
         if self.use_gpt:
-            from openai_key import openai_key
-            if openai_key == "":
+            # read openai_key from environment variable
+            openai_key = os.getenv("OPENAI_KEY")
+
+            if openai_key is None:
                 raise Exception("OpenAI key not set")
             self.client = OpenAI(api_key=openai_key)
         else:
@@ -172,7 +175,7 @@ class Words2Contact:
             Returns:
             str: The category of the prompt
         """
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["classifier"]["system_prompt"]
 
         if self.use_gpt:
@@ -228,7 +231,7 @@ class Words2Contact:
             List[str]: The objects in the prompt
         """
 
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["object_detection"]["system_prompt"]
         if self.use_gpt:
 
@@ -292,7 +295,7 @@ class Words2Contact:
         user_prompt = objects_prompt + prompt
 
         # get the system prompt from the json file
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["prediction"]["system_prompt"]
 
         if self.use_gpt:
@@ -369,7 +372,7 @@ class Words2Contact:
         with open('prompts/corrections/system_prompt.txt', 'r') as f:
             system_prompt = f.read()
 
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["correction"]["system_prompt"]
         if self.use_gpt:
 
@@ -426,7 +429,7 @@ class Words2Contact:
 
     def prompt_analyzer(self, prompt, img):
 
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["rel_or_abs"]["system_prompt"]
 
         if self.use_gpt:

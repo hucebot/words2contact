@@ -13,7 +13,7 @@ from transformers import (
     Owlv2ForObjectDetection,
 )
 from groundingdino.util.inference import Model
-from geom_utils import BoundingBox
+from .geom_utils import BoundingBox
 
 # Set matplotlib to interactive and suppress warnings
 import matplotlib
@@ -22,16 +22,11 @@ warnings.filterwarnings("ignore")
 
 # Constants
 WEIGHTS_NAME = "groundingdino_swint_ogc.pth"
-CONFIG_PATH = "config/GroundingDINO_SwinT_OGC.py"
+CONFIG_PATH = "words2contact/config/GroundingDINO_SwinT_OGC.py"
 WEIGHTS_PATH = os.path.join("/deps/weights", WEIGHTS_NAME)
 BOX_THRESHOLD = 0.2
 TEXT_THRESHOLD = 0.2
-TEXT_PROMPT = ["windex"]
 
-# Ensure image path and cache directories exist
-IMAGE_PATH = (
-    "dataset/images/53e2f90e25d2d125215b2c7f1612f54959ef89b779c33a40e341e72d62b45760.png"
-)
 
 class Yello:
     """
