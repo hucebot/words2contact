@@ -140,8 +140,8 @@ For questions or support, please contact:
 
 ---
 
-## Citing Words2Contact (preprint)
-If you use Words2Contact in your research, please cite our paper:
+## Citing Words2Contact 
+If you use Words2Contact, our [dataset](https://www.kaggle.com/datasets/dionisistotsila/words2contact-evaluation-dataset) or part of this code in your research, please cite our paper:
 ```bibtex
 @INPROCEEDINGS{totsila2024words2contactidentifyingsupportcontacts,
     author={Dionis Totsila and Quentin Rouxel and Jean-Baptiste Mouret and Serena Ivaldi},
