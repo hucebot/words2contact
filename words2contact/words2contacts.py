@@ -1,12 +1,14 @@
 import json
+import os
 import numpy as np
 from openai import OpenAI
 from llama_cpp import Llama
 from llama_cpp import LlamaGrammar
 from typing import List
-from math_pars import get_result
-from yello import Yello, Point
-from saygment import Saygment
+from .math_pars import get_result
+from .yello import Yello
+from .saygment import Saygment
+from .geom_utils import Point
 
 
 def convert_to_template(user_prompt: str, system_prompt: str, template: str) -> str:
@@ -127,11 +129,13 @@ def covert_to_template_with_examples(user_prompt: str, system_prompt: str, examp
 
 
 class Words2Contact:
-    def __init__(self, use_gpt=False, use_phi=False, llm_path='models/LLMs/Tess/tess-10.7b-v1.5b.Q6_K.gguf', yello_vlm="GroundingDINO", saygment_vlm="CLIP_Surgery", chat_template="Orca-Vicuna"):
+    def __init__(self, use_gpt=False, llm_path='models/tess-10.7b-v1.5b.Q6_K.gguf', yello_vlm="GroundingDINO", saygment_vlm="CLIP_Surgery", chat_template="Orca-Vicuna"):
         self.use_gpt = use_gpt
         if self.use_gpt:
-            from openai_key import openai_key
-            if openai_key == "":
+            # read openai_key from environment variable
+            openai_key = os.getenv("OPENAI_KEY")
+
+            if openai_key is None:
                 raise Exception("OpenAI key not set")
             self.client = OpenAI(api_key=openai_key)
         else:
@@ -156,9 +160,9 @@ class Words2Contact:
             Returns:
             Llama: The LLM model
         """
-        return Llama(llm_path, n_gpu_layers=-1, verbose=False, n_ctx=1024*4)
+        return Llama(llm_path, n_gpu_layers=100, verbose=False, n_ctx=1024*4)
 
-    def classify(self, prompt: str) -> str:
+    def module_selector(self, prompt: str) -> str:
         """
             Classifies the prompt into one of the following categories:
             - prediction
@@ -171,7 +175,7 @@ class Words2Contact:
             Returns:
             str: The category of the prompt
         """
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["classifier"]["system_prompt"]
 
         if self.use_gpt:
@@ -184,7 +188,8 @@ class Words2Contact:
 
             for example in prompts_json["classifier"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
 
             messages.append({"role": "user", "content": prompt})
 
@@ -204,7 +209,8 @@ class Words2Contact:
 
         else:
             # first we nee the classification grammar
-            grammar = LlamaGrammar.from_file("grammar/classifier.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "words2contact/grammar/classifier.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["prediction"]["examples"], self.template)
@@ -214,7 +220,7 @@ class Words2Contact:
 
             return category
 
-    def get_objects_in_prompt(self, prompt: str) -> List[str]:
+    def object_in_prompt_detector(self, prompt: str) -> List[str]:
         """
             Gets the objects in the prompt
 
@@ -225,7 +231,7 @@ class Words2Contact:
             List[str]: The objects in the prompt
         """
 
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["object_detection"]["system_prompt"]
         if self.use_gpt:
 
@@ -233,7 +239,8 @@ class Words2Contact:
             messages.append({"role": "system", "content": system_prompt})
             for example in prompts_json["object_detection"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
             messages.append({"role": "user", "content": prompt})
 
             completion = self.client.chat.completions.create(
@@ -252,7 +259,8 @@ class Words2Contact:
                 return []
 
         else:
-            grammar = LlamaGrammar.from_file("grammar/text_object_detector.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "words2contact/grammar/text_object_detector.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["object_detection"]["examples"], self.template)
@@ -260,9 +268,10 @@ class Words2Contact:
                                 max_tokens=1024*3, temperature=0, grammar=grammar)['choices'][0]['text']
 
             output = json.loads(output)
-
+            print("Objects in prompt detector response")
+            print(output)
             try:
-                return response["objects"]
+                return output["objects"]
             except:
                 return []
 
@@ -271,8 +280,8 @@ class Words2Contact:
         self.log.append(prompt)
         # let's extract the objects from the prompt
         if objects is None:
-            objects = self.get_objects_in_prompt(prompt)
-
+            objects = self.object_in_prompt_detector(prompt)
+            print(objects)
         # get the bounding boxes
         if len(objects) == 0:
             bbs = []
@@ -285,9 +294,11 @@ class Words2Contact:
             objects_prompt += bb.get_sys_prompt() + ". "
 
         user_prompt = objects_prompt + prompt
+        print("="*10)
+        print(user_prompt)
 
         # get the system prompt from the json file
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["prediction"]["system_prompt"]
 
         if self.use_gpt:
@@ -300,7 +311,8 @@ class Words2Contact:
 
             for example in prompts_json["prediction"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
 
             # now we add the user prompt
             messages.append({"role": "user", "content": user_prompt})
@@ -320,13 +332,15 @@ class Words2Contact:
                 user_prompt, system_prompt, prompts_json["prediction"]["examples"], self.template)
 
             # use llama cpp
-            grammar = LlamaGrammar.from_file("grammar/new_grammar.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "words2contact/grammar/rel_pos_grammar.gbnf", verbose=False)
             response = self.model(final_prompt, max_tokens=1024*4, temperature=0.6,
-                                  grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
+                                  grammar=grammar, repeat_penalty=1.2)['choices'][0]['text']
+
+            print(response)
         try:
             response = json.loads(response)
 
-            print("="*10)
             math_x = response["math_expression_x"]
             math_y = response["math_expression_y"]
             x = int(get_result(math_x))
@@ -335,19 +349,20 @@ class Words2Contact:
             # clip the point within the image
             x = min(max(0, x), img.shape[1])
             y = min(max(0, y), img.shape[0])
+            cot = response["chain_of_thought"]
+
 
         except:
             x = 0
             y = 0
-
-        cot = response["chain_of_thought"]
+            cot = "There was an exception in the prediction module"
 
         return Point(x, y), None, bbs, cot, response
 
     def correct(self, prompt: str, target: np.array, img: np.array) -> Point:
         self.log.append(prompt)
 
-        objects = self.get_objects_in_prompt(prompt)
+        objects = self.object_in_prompt_detector(prompt)
         bbs = []
         if len(objects) > 0:
             bbs = self.yello.predict(img, objects)
@@ -363,7 +378,7 @@ class Words2Contact:
         with open('prompts/corrections/system_prompt.txt', 'r') as f:
             system_prompt = f.read()
 
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["correction"]["system_prompt"]
         if self.use_gpt:
 
@@ -372,11 +387,10 @@ class Words2Contact:
             messages.append({"role": "system", "content": system_prompt})
             for example in prompts_json["correction"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
 
             messages.append({"role": "user", "content": user_prompt})
-
-            print(messages)
 
             completion = self.client.chat.completions.create(
                 model="gpt-3.5-turbo",
@@ -389,7 +403,6 @@ class Words2Contact:
             response = completion.choices[0].message.content
             response = json.loads(response)
             self.history.append([user_prompt, response])
-            print(response)
             try:
                 math_x = response["math_expression_x"]
                 math_y = response["math_expression_y"]
@@ -404,13 +417,13 @@ class Words2Contact:
             except:
                 x = target[1]
                 y = target[0]
-            print(x, y)
             cot = response["chain_of_thought"]
 
             return Point(x, y), bbs, cot, response
         else:
             # use llama cpp
-            grammar = LlamaGrammar.from_file("grammar/grammar.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "words2contact/grammar/eef_grammar.gbnf", verbose=False)
             output = self.model(convert_to_template(user_prompt, system_prompt, self.template),
                                 max_tokens=1024*3, temperature=0.2, grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
 
@@ -420,9 +433,9 @@ class Words2Contact:
             cot = response["chain_of_thought"]
             return Point(x, y), bbs, cot, response
 
-    def rel_or_abs(self, prompt, img):
+    def prompt_analyzer(self, prompt, img):
 
-        prompts_json = json.load(open('prompts/prompts.json'))["prompts"]
+        prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
         system_prompt = prompts_json["rel_or_abs"]["system_prompt"]
 
         if self.use_gpt:
@@ -430,7 +443,8 @@ class Words2Contact:
             messages.append({"role": "system", "content": system_prompt})
             for example in prompts_json["rel_or_abs"]["examples"]:
                 messages.append({"role": "user", "content": example["user"]})
-                messages.append({"role": "assistant", "content": example["assistant"]})
+                messages.append(
+                    {"role": "assistant", "content": example["assistant"]})
             messages.append({"role": "user", "content": prompt})
 
             completion = self.client.chat.completions.create(
@@ -444,12 +458,14 @@ class Words2Contact:
             response = json.loads(response)
 
         else:
-            grammar = LlamaGrammar.from_file("grammar/rel_or_abs.gbnf", verbose=False)
+            grammar = LlamaGrammar.from_file(
+                "words2contact/grammar/rel_or_abs.gbnf", verbose=False)
 
             final_prompt = covert_to_template_with_examples(
                 prompt, system_prompt, prompts_json["rel_or_abs"]["examples"], self.template)
 
-            output = self.model(final_prompt, max_tokens=1024*3, temperature=0.7, grammar=grammar)['choices'][0]['text']
+            output = self.model(final_prompt, max_tokens=1024*3,
+                                temperature=0.7, grammar=grammar)['choices'][0]['text']
 
             response = json.loads(output)
 
