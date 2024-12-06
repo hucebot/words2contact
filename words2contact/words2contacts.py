@@ -160,7 +160,7 @@ class Words2Contact:
             Returns:
             Llama: The LLM model
         """
-        return Llama(llm_path, n_gpu_layers=100, verbose=True, n_ctx=1024*4)
+        return Llama(llm_path, n_gpu_layers=100, verbose=False, n_ctx=1024*4)
 
     def module_selector(self, prompt: str) -> str:
         """
@@ -268,9 +268,10 @@ class Words2Contact:
                                 max_tokens=1024*3, temperature=0, grammar=grammar)['choices'][0]['text']
 
             output = json.loads(output)
-
+            print("Objects in prompt detector response")
+            print(output)
             try:
-                return response["objects"]
+                return output["objects"]
             except:
                 return []
 
@@ -280,7 +281,7 @@ class Words2Contact:
         # let's extract the objects from the prompt
         if objects is None:
             objects = self.object_in_prompt_detector(prompt)
-
+            print(objects)
         # get the bounding boxes
         if len(objects) == 0:
             bbs = []
@@ -293,6 +294,8 @@ class Words2Contact:
             objects_prompt += bb.get_sys_prompt() + ". "
 
         user_prompt = objects_prompt + prompt
+        print("="*10)
+        print(user_prompt)
 
         # get the system prompt from the json file
         prompts_json = json.load(open('words2contact/prompts/prompts.json'))["prompts"]
@@ -332,7 +335,9 @@ class Words2Contact:
             grammar = LlamaGrammar.from_file(
                 "words2contact/grammar/rel_pos_grammar.gbnf", verbose=False)
             response = self.model(final_prompt, max_tokens=1024*4, temperature=0.6,
-                                  grammar=grammar, repeat_penalty=1.1)['choices'][0]['text']
+                                  grammar=grammar, repeat_penalty=1.2)['choices'][0]['text']
+
+            print(response)
         try:
             response = json.loads(response)
 
@@ -344,12 +349,13 @@ class Words2Contact:
             # clip the point within the image
             x = min(max(0, x), img.shape[1])
             y = min(max(0, y), img.shape[0])
+            cot = response["chain_of_thought"]
+
 
         except:
             x = 0
             y = 0
-
-        cot = response["chain_of_thought"]
+            cot = "There was an exception in the prediction module"
 
         return Point(x, y), None, bbs, cot, response
 

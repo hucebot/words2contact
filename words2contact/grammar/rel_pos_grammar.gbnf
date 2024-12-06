@@ -9,6 +9,6 @@ stringlist ::= "["   ws   "]" | "["   ws   string   (","   ws   string)*   ws   
 numberlist ::= "["   ws   "]" | "["   ws   string   (","   ws   number)*   ws   "]"
 
 expression ::= "\"" term ([-+*/]ws term)* "\""
-term  ::=  num | "(" ws expr ")" ws
+term  ::=  num | ( ws expression ) ws
 num   ::= [0-9]+ ws
 ws    ::= [ \t\n]*

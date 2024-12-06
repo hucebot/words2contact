@@ -31,8 +31,8 @@ if __name__ == "__main__":
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Run Words2Contact with an image and a text prompt.")
     parser.add_argument("--image_path", type=str, default="data/test.png", help="Path to the input image file. Default: 'data/test.png'.")
-    parser.add_argument("--prompt", type=str, default="Place your hand above the red bowl, a lot left from the banana.",
-                        help="Text prompt for Words2Contact. Default: 'Place your hand above the red bowl, a lot left from the banana.'.")
+    parser.add_argument("--prompt", type=str, default="Place your hand above the red bowl.",
+                        help="Text prompt for Words2Contact. Default: 'Place your hand above the red bowl.'.")
     parser.add_argument("--use_gpt", action="store_true", help="use openai api for the llm, remember to export OPEANAI_KEY")
     parser.add_argument("--yello_vlm", type=str, default="GroundingDINO", help="Model to use for YELLO VLM. Default: 'GroundingDINO'.")
     parser.add_argument("--output_path", type=str, default="data/test_output.png", help="Path to save the output image. Default: 'data/test_output.png'.")

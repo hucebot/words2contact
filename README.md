@@ -2,9 +2,9 @@
 
 ![GitHub](media/concept_figure_wide.png)
 
-Official implementation of the paper "Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models" submitted at IEEE Humanoids 2024.
+Official implementation of the paper "Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models" presented at IEEE-RAS Humanoids 2024.
 
-This code only contains the implementation of the LLMs/VLMs part, for the whole body controller please contact the authors.
+This code only contains the implementation of the LLMs/VLMs part, for the multi-contact whole body controller please contact the authors.
 
 For more information, please visit the [paper website](https://hucebot.github.io/words2contact_website/).
 
@@ -78,14 +78,11 @@ For any questions, please contact Dionis Totsila [dionis.totsila@inria.fr](mailt
 ## Citing Words2Contact (preprint)
 If you use Words2Contact in your research, please cite our paper:
 ```bibtex
-@misc{totsila2024words2contactidentifyingsupportcontacts,
-      title={Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models},
-      author={Dionis Totsila and Quentin Rouxel and Jean-Baptiste Mouret and Serena Ivaldi},
-      year={2024},
-      eprint={2407.14229},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO},
-      url={https://arxiv.org/abs/2407.14229},
+@INPROCEEDINGS{totsila2024words2contactidentifyingsupportcontacts,
+    author={Dionis Totsila and Quentin Rouxel and Jean-Baptiste Mouret and Serena Ivaldi},
+    booktitle={2024 IEEE-RAS 23rd International Conference on Humanoid Robots (Humanoids)},
+    title={Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models},
+    year={2024},
 }
 ```
 

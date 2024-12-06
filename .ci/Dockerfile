@@ -43,7 +43,7 @@ RUN pip install --no-cache-dir \
 
 
 # Install LLAMA CPP Python with CUDA support
-RUN CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python
+RUN CMAKE_ARGS="-DGGML_CUDA=on -DLLAVA_BUILD=off" pip install -U llama-cpp-python --force-reinstall --no-cache-dir
 
 # Download and setup weights for GroundingDINO
 RUN mkdir -p /deps/weights && \
