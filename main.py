@@ -37,7 +37,7 @@ if __name__ == "__main__":
     parser.add_argument("--yello_vlm", type=str, default="GroundingDINO", help="Model to use for YELLO VLM. Default: 'GroundingDINO'.")
     parser.add_argument("--output_path", type=str, default="data/test_output.png", help="Path to save the output image. Default: 'data/test_output.png'.")
     parser.add_argument("--llm_path", type=str, default="models/Calme-7B-Instruct-v0.4.Q8_0.gguf", help="Path to the .gguf llm model weights")
-    parser.add_argument("--chat_template", type=str, default="ChatML", help="OpenAI key for the gpt model")
+    parser.add_argument("--chat_template", type=str, default="ChatML", help="Which chat template to use for local llms, Default: ChatML ")
 
     # Parse arguments
     args = parser.parse_args()
