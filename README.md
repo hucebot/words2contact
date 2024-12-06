@@ -61,13 +61,14 @@ For more details, visit the [paper website](https://hucebot.github.io/words2cont
 
 ## Prerequisites
 Before starting, ensure you have the following:
-- **Docker** (v20.10 or later)
-- **Python 3.10** or later (for running scripts outside Docker)
+- **Docker**
+- NVIDIA Container Toolkit (if using GPU (recommended))
 - An **OpenAI API Key** (if using GPT-based LLMs). You can obtain it from [OpenAI](https://platform.openai.com/).
 
 ---
 
 ## Installation
+For now only Docker is supported, conda and pip installations will be added soon.
 
 1. Clone the repository:
     ```bash
@@ -149,8 +150,6 @@ If you use Words2Contact in your research, please cite our paper:
     year={2024},
 }
 ```
-
-[**Read the preprint here**](https://arxiv.org/abs/XXXX.XXXXX) *(Add this link when available.)*
 
 ---
 
