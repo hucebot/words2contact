@@ -4,6 +4,7 @@
     <a href="https://ieeexplore.ieee.org/abstract/document/10769902" target="_blank"><button style="background-color: #008CBA; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Paper</button></a>
     <a href="https://www.kaggle.com/datasets/dionisistotsila/words2contact-evaluation-dataset" target="_blank"><button style="background-color: #f44336; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Dataset</button></a>
 </div>
+
 ![GitHub](media/concept_figure_wide.png)
 
 Official implementation of the paper *"Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models"* presented at IEEE-RAS Humanoids 2024.
