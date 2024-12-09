@@ -1,5 +1,9 @@
 # Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models
-
+<div align="center">
+    <a href="https://hucebot.github.io/words2contact_website/" target="_blank"><button style="background-color: #4CAF50; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Website</button></a>
+    <a href="https://ieeexplore.ieee.org/abstract/document/10769902" target="_blank"><button style="background-color: #008CBA; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Paper</button></a>
+    <a href="https://www.kaggle.com/datasets/dionisistotsila/words2contact-evaluation-dataset" target="_blank"><button style="background-color: #f44336; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Dataset</button></a>
+</div>
 ![GitHub](media/concept_figure_wide.png)
 
 Official implementation of the paper *"Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models"* presented at IEEE-RAS Humanoids 2024.
@@ -143,12 +147,16 @@ For questions or support, please contact:
 ## Citing Words2Contact 
 If you use Words2Contact, our [dataset](https://www.kaggle.com/datasets/dionisistotsila/words2contact-evaluation-dataset) or part of this code in your research, please cite our paper:
 ```bibtex
-@INPROCEEDINGS{totsila2024words2contactidentifyingsupportcontacts,
-    author={Dionis Totsila and Quentin Rouxel and Jean-Baptiste Mouret and Serena Ivaldi},
-    booktitle={2024 IEEE-RAS 23rd International Conference on Humanoid Robots (Humanoids)},
-    title={Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models},
-    year={2024},
-}
+@INPROCEEDINGS{10769902,
+  author={Totsila, Dionis and Rouxel, Quentin and Mouret, Jean-Baptiste and Ivaldi, Serena},
+  booktitle={2024 IEEE-RAS 23rd International Conference on Humanoid Robots (Humanoids)}, 
+  title={Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={9-16},
+  keywords={Accuracy;Large language models;Pipelines;Natural languages;Humanoid robots;Transforms;Benchmark testing;Iterative methods;Surface treatment},
+  doi={10.1109/Humanoids58906.2024.10769902}}
 ```
 
 ---
