@@ -2,11 +2,20 @@
 
 ![GitHub](media/concept_figure_wide.png)
 
-<div align="center">
+<!-- <div align="center">
     <a href="https://hucebot.github.io/words2contact_website/" target="_blank"><button style="background-color: #4CAF50; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Website</button></a>
     <a href="https://ieeexplore.ieee.org/abstract/document/10769902" target="_blank"><button style="background-color: #008CBA; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Paper</button></a>
-    <a href="https://www.kaggle.com/datasets/dionisistotsila/words2contact-evaluation-dataset" target="_blank"><button style="background-color: #f44336; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Dataset</button></a>
+    <a href="https://www.kaggle.com/datasets/dionisistotsila/words2contact-evaluation-dataset" target="_blank"><button style="background-color: #f44336; color: white; padding: 10px 20px; margin: 5px; border: none; cursor: pointer; font-size: 16px;">Dataset</button></a> -->
+<!-- </div> -->
+
+<div align="center">
+
+[![Paper](https://img.shields.io/badge/Paper-blue)](https://ieeexplore.ieee.org/abstract/document/10769902)
+[![Dataset](https://img.shields.io/badge/Dataset-cyan)](https://www.kaggle.com/datasets/dionisistotsila/words2contact-evaluation-dataset)
+[![Website](https://img.shields.io/badge/Website-purple)](https://hucebot.github.io/words2contact_website/)
+[![arXiv](https://img.shields.io/badge/Preprint-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2407.14229)
 </div>
+
 
 Official implementation of the paper *"Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models"* presented at IEEE-RAS Humanoids 2024.
 
@@ -17,15 +26,20 @@ For more details, visit the [paper website](https://hucebot.github.io/words2cont
 ---
 
 ## Table of Contents
-1. [Repository Structure](#repository-structure)
-2. [Prerequisites](#prerequisites)
-3. [Installation](#installation)
-4. [Usage](#usage)
+- [Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models](#words2contact-identifying-support-contacts-from-verbal-instructions-using-foundation-models)
+  - [Table of Contents](#table-of-contents)
+  - [Repository Structure](#repository-structure)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Set Up](#set-up)
+    - [Launching the Docker Container](#launching-the-docker-container)
     - [Quick Start](#quick-start)
     - [Command-Line Options](#command-line-options)
-5. [Citation](#citing-words2contact-preprint)
-6. [Acknowledgements](#acknowledgements)
-7. [Contact](#contact)
+    - [Using Local LLMs](#using-local-llms)
+  - [Contact](#contact)
+  - [Citing Words2Contact](#citing-words2contact)
+  - [Acknowledgements](#acknowledgements)
 
 ---
 
@@ -146,13 +160,13 @@ For questions or support, please contact:
 
 ---
 
-## Citing Words2Contact 
+## Citing Words2Contact
 If you use Words2Contact, our [dataset](https://www.kaggle.com/datasets/dionisistotsila/words2contact-evaluation-dataset) or part of this code in your research, please cite our paper:
 ```bibtex
 @INPROCEEDINGS{10769902,
   author={Totsila, Dionis and Rouxel, Quentin and Mouret, Jean-Baptiste and Ivaldi, Serena},
-  booktitle={2024 IEEE-RAS 23rd International Conference on Humanoid Robots (Humanoids)}, 
-  title={Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models}, 
+  booktitle={2024 IEEE-RAS 23rd International Conference on Humanoid Robots (Humanoids)},
+  title={Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models},
   year={2024},
   volume={},
   number={},
