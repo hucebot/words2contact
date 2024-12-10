@@ -19,7 +19,7 @@
 
 Official implementation of the paper *"Words2Contact: Identifying Support Contacts from Verbal Instructions Using Foundation Models"* presented at IEEE-RAS Humanoids 2024.
 
-This repository contains the implementation of the LLMs/VLMs part of the project. For the multi-contact whole-body controller, please contact the authors.
+This repository contains the implementation of the LLMs/VLMs part of the project. For the multi-contact whole-body controller, please visit [this repo](https://github.com/hucebot/seiko_controller_code).
 
 For more details, visit the [paper website](https://hucebot.github.io/words2contact_website/).
 
